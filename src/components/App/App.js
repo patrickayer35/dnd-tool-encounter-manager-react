@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import { PCForm, NPCForm } from '../CharacterForms/CharacterForms.js';
 import CharacterEntry from '../CharacterEntry/CharacterEntry.js';
 
-import './styles-reset.css';
+import '../../styles/styles-reset.css';
 import './App.css';
 
 class App extends React.Component {
