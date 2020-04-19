@@ -1,4 +1,4 @@
-body::after { content: ''; background: url('../../assets/gandalf_vs_balrog.jpg'); opacity: 0.4; top: -166px; bottom: 0; left: 0; right: 0; position: absolute; z-index: -1; background-size: cover; background-repeat: no-repeat; }
+body::after { content: ''; background: url('../../assets/gandalf_vs_balrog.jpg'); opacity: 0.4; top: -166px; bottom: 0; left: 0; right: 0; position: absolute; z-index: -1; background-size: 1680px; background-repeat: no-repeat; }
 
     #root { margin: 40px; }
 

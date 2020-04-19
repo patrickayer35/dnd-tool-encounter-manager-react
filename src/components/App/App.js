@@ -84,15 +84,12 @@ class App extends React.Component {
                             <legend id='characterList__header'>Character List</legend>
                             <p id='characterList__helper'>* unique character</p>
                             <div id='characterList__mainList'>
-                                {this.state.characterList.map((c, i) => (
-                                    <CharacterEntry key={i}
-                                                    characterIndex={i}
+                                {this.state.characterList.map((c) => (
+                                    <CharacterEntry key={c.id}
+                                                    characterIndex={c.id}
                                                     isUnique={c.unique}
                                                     name={c.name}
-                                                    passivePerception={c.passivePerception}
-                                                    // editCharacter={}
-                                                    // 
-                                                    />
+                                                    passivePerception={c.passivePerception}/>
                                 ))}
                             </div>
                         </fieldset>

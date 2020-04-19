@@ -49,6 +49,7 @@ class PCForm extends React.Component {
             return;
         }
         let newCharacter = {
+            id: Date.now(),
             pc: true,
             unique: true,
             name: document.getElementById('editForm__nameInput--pc').value,
@@ -146,7 +147,7 @@ class NPCForm extends React.Component {
 
         if (document.getElementById('editForm__raceInput--npc').value != '') {
             if (document.getElementById('editForm__passivePerceptionInput--npc').value != '') {
-                if (document.getElementById('editForm__dexterityInput--pc').value != '') {
+                if (document.getElementById('editForm__dexterityInput--npc').value != '') {
                     if (document.getElementById('editForm__pageNumberInput--npc').value != '') {
                         if (document.getElementById('editForm__hitPointsInput--npc').value != '') {
                             return true;
@@ -211,12 +212,13 @@ class NPCForm extends React.Component {
         }
 
         let newCharacter = {
+            id: Date.now(),
             pc: false,
-            unique: document.getElementById('editForm__nameInput--pc') != '' ? true : false,
-            name: document.getElementById('editForm__nameInput--pc').value,
-            race: document.getElementById('editForm__raceInput--pc').value,
-            passivePerception: document.getElementById('editForm__passivePerceptionInput--pc').value,
-            dexterity: document.getElementById('editForm__dexterityInput--pc').value,
+            unique: document.getElementById('editForm__nameInput--npc') != '' ? true : false,
+            name: document.getElementById('editForm__nameInput--npc').value,
+            race: document.getElementById('editForm__raceInput--npc').value,
+            passivePerception: document.getElementById('editForm__passivePerceptionInput--npc').value,
+            dexterity: document.getElementById('editForm__dexterityInput--npc').value,
             hitPoints: document.getElementById('editForm__hitPointsInput--npc').value,
             hitDiceCount: document.getElementById('editForm__hitDiceInput--npc').value,
             hitDice: hitDiceEval,
