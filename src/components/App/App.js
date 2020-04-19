@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import update from 'react-addons-update';
 import { PCForm, NPCForm } from '../CharacterForms/CharacterForms.js';
 import CharacterEntry from '../CharacterEntry/CharacterEntry.js';
 
@@ -11,7 +12,8 @@ class App extends React.Component {
         super(props);
         this.state = {
             characterList: [],
-            create: true
+            create: true,
+            editId: null
         };
     }
 
@@ -43,11 +45,49 @@ class App extends React.Component {
                 characterList: this.state.characterList.concat(newCharacter)
             } );
         }
+        else {
+            for (let i = 0; i < this.state.characterList.length; i++) {
+                if (this.state.characterList[i].id == this.state.editId) {
+                    this.setState(update(this.state, {
+                        characterList: {
+                            [i]: {
+                                $set: newCharacter
+                            }
+                        }
+                    }));
+                }
+            }
+            this.setState({
+                create: true,
+                editId: null
+            });
+        }
         if (newCharacter.pc) {
             this.toggleEditMenuPCForm();
         }
         else {
             this.toggleEditMenuNPCForm();
+        }
+    }
+
+    editCharacter(characterId) {
+        for (let i = 0; i < this.state.characterList.length; i++) {
+            if (this.state.characterList[i].id == characterId) {
+                
+                this.setState({
+                    create: false,
+                    editId: characterId
+                });
+
+                if (this.state.characterList[i].pc) {
+                    this.toggleEditMenuPCForm();
+                    document.getElementById('editForm__nameInput--pc').value = this.state.characterList[i].name;
+                    document.getElementById('editForm__raceInput--pc').value = this.state.characterList[i].race;
+                    document.getElementById('editForm__passivePerceptionInput--pc').value = this.state.characterList[i].passivePerception;
+                    document.getElementById('editForm__dexterityInput--pc').value = this.state.characterList[i].dexterity;
+                }
+
+            }
         }
     }
 
@@ -84,12 +124,14 @@ class App extends React.Component {
                             <legend id='characterList__header'>Character List</legend>
                             <p id='characterList__helper'>* unique character</p>
                             <div id='characterList__mainList'>
-                                {this.state.characterList.map((c) => (
+                                {this.state.characterList.map(c => (
                                     <CharacterEntry key={c.id}
+                                                    create={this.state.create}
                                                     characterIndex={c.id}
                                                     isUnique={c.unique}
-                                                    name={c.name}
-                                                    passivePerception={c.passivePerception}/>
+                                                    name={c.name != '' ? c.name : c.race}
+                                                    passivePerception={c.passivePerception}
+                                                    edit={this.editCharacter.bind(this)}/>
                                 ))}
                             </div>
                         </fieldset>

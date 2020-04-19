@@ -214,7 +214,7 @@ class NPCForm extends React.Component {
         let newCharacter = {
             id: Date.now(),
             pc: false,
-            unique: document.getElementById('editForm__nameInput--npc') != '' ? true : false,
+            unique: document.getElementById('editForm__nameInput--npc').value == '' ? false : true,
             name: document.getElementById('editForm__nameInput--npc').value,
             race: document.getElementById('editForm__raceInput--npc').value,
             passivePerception: document.getElementById('editForm__passivePerceptionInput--npc').value,

@@ -20,6 +20,7 @@
   "homepage": "https://github.com/patrickayer35/dnd-tool-encounter-manager-react#readme",
   "dependencies": {
     "react": "^16.13.1",
+    "react-addons-update": "^15.6.2",
     "react-dom": "^16.13.1"
   },
   "devDependencies": {

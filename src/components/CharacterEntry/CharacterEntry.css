@@ -1,7 +1,7 @@
-.characterList__character { display: flex; align-items: center; justify-content: flex-start; }
+.characterList__character { display: flex; align-items: center; justify-content: flex-start; padding-bottom: 10px; }
 
-    .characterList__characterName { width: 300px; }
+    .characterList__nameBtn { width: 300px; }
 
-    .characterList__characterPassPerc { width: 70px; }
+    .characterList__passivePerceptionDisplay { width: 70px; }
 
     .characterList__character button { margin: 0 20px 0 0; }
