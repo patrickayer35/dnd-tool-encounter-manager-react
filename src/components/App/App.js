@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import update from 'react-addons-update';
-import { PCForm, NPCForm } from '../CharacterForms/CharacterForms.js';
+import { CharacterForm } from '../CharacterForm/CharacterForm.js';
 import CharacterEntry from '../CharacterEntry/CharacterEntry.js';
 
 import '../../styles/styles-reset.css';
@@ -13,56 +13,31 @@ class App extends React.Component {
         this.state = {
             characterList: [],
             appState: 'start',
+            formType: 'pc',
             create: true,
             editId: null
         };
     }
 
-    // TOGGLE FUNCTIONS
-    toggleOpeningMenuRunningTheGame() {
-        document.getElementById('openingMenu').classList.toggle('hide');
-        document.getElementById('runningTheGame').classList.toggle('hide');
+    exitToOpeningMenu() {
+
+        if (this.state.characterList.length > 0) {
+            if (confirm('Are you sure? All current session data will be lost.')) {
+                this.setState( { characterList: [] } );
+            }
+            else {
+                return;
+            }
+        }
+
+        this.setState( { appState: 'start' } );
+
     }
 
-    toggleRunningTheGameEditMenu() {
-        document.getElementById('runningTheGame').classList.toggle('hide');
-        document.getElementById('editMenu').classList.toggle('hide');
-    }
-
-    toggleEditMenuPCForm() {
-        document.getElementById('editMenu').classList.toggle('hide');
-        document.getElementById('editForm--pc').classList.toggle('hide');
-    }
-
-    toggleEditMenuNPCForm() {
-        document.getElementById('editMenu').classList.toggle('hide');
-        document.getElementById('editForm--npc').classList.toggle('hide');
-    }
-
-    // SETTING EDIT AND CREATE STATES
-    setEditState(c, i = 0) {
-        this.setState({
-            create: c,
-            i: i == 0 ? null : i
-        });
-    }
-
-    cancelPCFormEdit() {
-        this.toggleEditMenuPCForm();
-        this.setEditState(true);
-    }
-
-    cancelNPCFormEdit() {
-        this.toggleEditMenuNPCForm();
-        this.setEditState(true);
-    }
-
-    // SAVE CHARACTER FUNCTIONS
+    // EDIT CHARACTER FUNCTIONS
     saveCharacterData(newCharacter) {
         if (this.state.create) {
-            this.setState( {
-                characterList: this.state.characterList.concat(newCharacter)
-            } );
+            this.setState( { characterList: this.state.characterList.concat(newCharacter) } );
         }
         else {
             for (let i = 0; i < this.state.characterList.length; i++) {
@@ -76,56 +51,48 @@ class App extends React.Component {
                     }));
                 }
             }
-            this.setEditState(true);
+            this.setState( {
+                create: true,
+                editId: null
+            } );
         }
-
-        newCharacter.pc ? this.toggleEditMenuPCForm() : this.toggleEditMenuNPCForm();
+        this.setState( { appState: 'edit' } )
     }
 
-    editCharacter(characterId) {
+    populateForm(characterId) {
+
+        console.log(this.state);
+        
         for (let i = 0; i < this.state.characterList.length; i++) {
+            
             if (this.state.characterList[i].id == characterId) {
-                
-                this.setEditState(false, characterId);
 
-                if (this.state.characterList[i].pc) {
-                    this.toggleEditMenuPCForm();
-                    document.getElementById('editForm__nameInput--pc').value = this.state.characterList[i].name;
-                    document.getElementById('editForm__raceInput--pc').value = this.state.characterList[i].race;
-                    document.getElementById('editForm__passivePerceptionInput--pc').value = this.state.characterList[i].passivePerception;
-                    document.getElementById('editForm__dexterityInput--pc').value = this.state.characterList[i].dexterity;
-                }
+                this.setState({
+                    appState: 'form displayed',
+                    formType: this.state.characterList[i].pc ? 'pc' : 'npc',
+                    create: false,
+                    editId: characterId
+                }, () => {
 
-                else {
-                    this.toggleEditMenuNPCForm();
-                    document.getElementById('editForm__nameInput--npc').value = this.state.characterList[i].name;
-                    document.getElementById('editForm__raceInput--npc').value = this.state.characterList[i].race;
-                    document.getElementById('editForm__passivePerceptionInput--npc').value = this.state.characterList[i].passivePerception;
-                    document.getElementById('editForm__dexterityInput--npc').value = this.state.characterList[i].dexterity;
-                    document.getElementById('editForm__hitPointsInput--npc').value = this.state.characterList[i].hitPoints;
-                    document.getElementById('editForm__hitDiceInput--npc').value = this.state.characterList[i].hitDiceCount;
-                    document.getElementById('editForm__hitPointsModInput--npc').value = this.state.characterList[i].hitPointsModifier;
-                    document.getElementById('editForm__pageNumberInput--npc').value = this.state.characterList[i].pageNumber;
-                    switch(this.state.characterList[i].hitDice) {
-                        case 4:
-                            document.getElementById('editForm__d4--npc').checked = true;
-                            break;
-                        case 6:
-                            document.getElementById('editForm__d6--npc').checked = true;
-                            break;
-                        case 8:
-                            document.getElementById('editForm__d8--npc').checked = true;
-                            break;
-                        case 10:
-                            document.getElementById('editForm__d10--npc').checked = true;
-                            break;
-                        case 12:
-                            document.getElementById('editForm__d12--npc').checked = true;
-                            break;
-                        case 20:
-                            document.getElementById('editForm__d20--npc').checked = true;
+                    document.getElementById('editForm__nameInput').value = this.state.characterList[i].name;
+                    document.getElementById('editForm__raceInput').value = this.state.characterList[i].race;
+                    document.getElementById('editForm__passivePerceptionInput').value = this.state.characterList[i].passivePerception;
+                    document.getElementById('editForm__dexterityInput').value = this.state.characterList[i].dexterity;
+
+                    if (!this.state.characterList[i].pc) {
+                        document.getElementById('editForm__hitPointsInput').value = this.state.characterList[i].hitPoints;
+                        document.getElementById('editForm__hitDiceInput').value = this.state.characterList[i].hitDiceCount;
+                        document.getElementById('editForm__hitPointsModInput').value = this.state.characterList[i].hitPointsModifier;
+                        document.getElementById('editForm__pageNumberInput').value = this.state.characterList[i].pageNumber;
+                        document.getElementById('editForm__d4').checked = this.state.characterList[i].d4;
+                        document.getElementById('editForm__d6').checked = this.state.characterList[i].d6;
+                        document.getElementById('editForm__d8').checked = this.state.characterList[i].d8;
+                        document.getElementById('editForm__d10').checked = this.state.characterList[i].d10;
+                        document.getElementById('editForm__d12').checked = this.state.characterList[i].d12;
+                        document.getElementById('editForm__d20').checked = this.state.characterList[i].d20;
                     }
-                }
+
+                });
 
             }
         }
@@ -149,33 +116,40 @@ class App extends React.Component {
 
     }
 
+    hideForm() {
+        this.setState({
+            appState: 'edit',
+            create: true,
+            editId: null
+        });
+    }
+
     render() {
         return(
             <Fragment>
                 <h1>Dungeons &amp; Dragons: Encounter Manager</h1>
                 <div id='main'>
                     <div id='appSide'>
-                        <div id='openingMenu'>
-                            <button type='button' onClick={this.toggleOpeningMenuRunningTheGame.bind(this)}>Start New Session</button>
+                        <div id='openingMenu' className={this.state.appState != 'start' ? 'hide' : ''}>
+                            <button type='button' onClick={ () => (this.setState( { appState: 'main' } )) }>Start New Session</button>
                             <button type='button'>Load Session</button>
                         </div>
-                        <div id='runningTheGame' className='hide'>
-                            <button type='button' onClick={this.toggleRunningTheGameEditMenu.bind(this)}>Edit Session</button>
+                        <div id='runningTheGame' className={this.state.appState != 'main' ? 'hide' : ''}>
+                            <button type='button' onClick={() => (this.setState( { appState: 'edit' } )) }>Edit Session</button>
                             <button type='button'>Save Session</button>
                             <button type='button'>Start New Encounter</button>
-                            <button type='button' onClick={this.toggleOpeningMenuRunningTheGame.bind(this)}>Back to Home</button>
+                            <button type='button' onClick={ this.exitToOpeningMenu.bind(this) }>Back to Home</button>
                         </div>
-                        <div id='editMenu' className='hide'>
-                            <button type='button' onClick={this.toggleEditMenuPCForm.bind(this)}>Add PC</button>
-                            <button type='button' onClick={this.toggleEditMenuNPCForm.bind(this)}>Add NPC</button>
-                            <button type='button' onClick={this.toggleRunningTheGameEditMenu.bind(this)}>Done Editing</button>
+                        <div id='editMenu' className={this.state.appState != 'edit' ? 'hide' : ''}>
+                            <button type='button' onClick={ () => (this.setState( { appState: 'form displayed', formType: 'pc' } )) }>Add PC</button>
+                            <button type='button' onClick={ () => (this.setState( { appState: 'form displayed', formType: 'npc' } )) }>Add NPC</button>
+                            <button type='button' onClick={ () => (this.setState( { appState: 'main' } )) }>Done Editing</button>
                         </div>
-                        <PCForm header={`${this.state.create ? 'Create' : 'Edit' } PC`}
-                                saveCharacterData={this.saveCharacterData.bind(this)}
-                                hideThisForm={this.cancelPCFormEdit.bind(this)}/>
-                        <NPCForm header={`${this.state.create ? 'Create ' : 'Edit '} NPC`}
-                                 saveCharacterData={this.saveCharacterData.bind(this)}
-                                 hideThisForm={this.cancelNPCFormEdit.bind(this)}/>
+                        <CharacterForm appState={this.state.appState}
+                                       create={this.state.create}
+                                       npc={this.state.formType == 'npc' ? true : false}
+                                       save={this.saveCharacterData.bind(this)}
+                                       goBack={this.hideForm.bind(this)}/>
                     </div>
                     <div id='characterList' className={this.state.characterList.length == 0 ? 'hide' : ''}>
                         <fieldset id='characterList__border'>
@@ -184,12 +158,12 @@ class App extends React.Component {
                             <div id='characterList__mainList'>
                                 {this.state.characterList.map(c => (
                                     <CharacterEntry key={c.id}
-                                                    create={this.state.create}
+                                                    appState={this.state.appState}
                                                     characterIndex={c.id}
                                                     isUnique={c.unique}
                                                     name={c.name != '' ? c.name : c.race}
                                                     passivePerception={c.passivePerception}
-                                                    edit={this.editCharacter.bind(this)}
+                                                    edit={this.populateForm.bind(this)}
                                                     delete={this.deleteCharacter.bind(this)}/>
                                 ))}
                             </div>
