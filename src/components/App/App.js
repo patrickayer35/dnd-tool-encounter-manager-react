@@ -135,7 +135,7 @@ class App extends React.Component {
                             <button type='button'>Load Session</button>
                         </div>
                         <div id='runningTheGame' className={this.state.appState != 'main' ? 'hide' : ''}>
-                            <button type='button' onClick={() => (this.setState( { appState: 'edit' } )) }>Edit Session</button>
+                            <button type='button' onClick={ () => (this.setState( { appState: 'edit' } )) }>Edit Session</button>
                             <button type='button'>Save Session</button>
                             <button type='button'>Start New Encounter</button>
                             <button type='button' onClick={ this.exitToOpeningMenu.bind(this) }>Back to Home</button>
