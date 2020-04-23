@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import update from 'react-addons-update';
 import { CharacterForm } from '../CharacterForm/CharacterForm.js';
-import CharacterEntry from '../CharacterEntry/CharacterEntry.js';
+import { CharacterEntry } from '../CharacterEntry/CharacterEntry.js';
 
 import '../../styles/styles-reset.css';
 import './App.css';
@@ -12,6 +12,7 @@ class App extends React.Component {
         super(props);
         this.state = {
             characterList: [],
+            encounterList: [],
             appState: 'start',
             formType: 'pc',
             create: true,
@@ -124,6 +125,25 @@ class App extends React.Component {
         });
     }
 
+    stageEncounter() {
+
+        if (this.state.characterList.length < 1) {
+            alert('You need at least two characters to start an encounter');
+            return;
+        }
+
+        this.setState({
+            appState: 'encounter staging'
+        });
+
+    }
+
+    addToEncounter(characterIndex) {
+
+
+
+    }
+
     render() {
         return(
             <Fragment>
@@ -137,7 +157,7 @@ class App extends React.Component {
                         <div id='runningTheGame' className={this.state.appState != 'main' ? 'hide' : ''}>
                             <button type='button' onClick={ () => (this.setState( { appState: 'edit' } )) }>Edit Session</button>
                             <button type='button'>Save Session</button>
-                            <button type='button'>Start New Encounter</button>
+                            <button type='button' onClick={ this.stageEncounter.bind(this) }>Start New Encounter</button>
                             <button type='button' onClick={ this.exitToOpeningMenu.bind(this) }>Back to Home</button>
                         </div>
                         <div id='editMenu' className={this.state.appState != 'edit' ? 'hide' : ''}>
@@ -150,6 +170,19 @@ class App extends React.Component {
                                        npc={this.state.formType == 'npc' ? true : false}
                                        save={this.saveCharacterData.bind(this)}
                                        goBack={this.hideForm.bind(this)}/>
+                        <div id='encounterStaging' className={this.state.appState != 'encounter staging' ? 'hide' : ''}>
+                            <fieldset id='encounterStaging__border'>
+                                <legend id='encounterStaging__header'>Roll for initiative</legend>
+                                <p className='encounterStaging__helper'>Click a character name to add to the encounter</p>
+                                <p className='encounterStaging__helper'>All characters marked with an asterisk (*) require an initiative roll</p>
+                                <p className='encounterStaging__helper'>Characters not marked with an asterisk will automatically generate an initiative roll</p>
+                                <div id='encounterStaging__characterList'>
+                                    {this.state.encounterList.map(c => (
+                                        <EncounterEntry key={c.id}/>
+                                    ))}
+                                </div>
+                            </fieldset>
+                        </div>
                     </div>
                     <div id='characterList' className={this.state.characterList.length == 0 ? 'hide' : ''}>
                         <fieldset id='characterList__border'>
@@ -163,6 +196,7 @@ class App extends React.Component {
                                                     isUnique={c.unique}
                                                     name={c.name != '' ? c.name : c.race}
                                                     passivePerception={c.passivePerception}
+                                                    addToEncounter={this.addToEncounter.bind(this)}
                                                     edit={this.populateForm.bind(this)}
                                                     delete={this.deleteCharacter.bind(this)}/>
                                 ))}

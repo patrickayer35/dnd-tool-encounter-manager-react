@@ -6,6 +6,14 @@ body::after { content: ''; background: url('../../assets/gandalf_vs_balrog.jpg')
         
             #appSide { width: 60%; }
 
+            #encounterStaging {background-color: rgba(255, 255, 255, 0.5); font-family: 'Cinzel', serif; padding: 30px;  }
+
+                #encounterStaging__border { border-style: double; border-width: 7px; border-color: rgb(185, 48, 50); padding: 20px; }
+            
+                    #encounterStaging__header { font-size: 20px; color: rgb(185, 48, 50); padding: 0 10px; }
+            
+                    .encounterStaging__helper { margin-bottom: 20px; }
+
             #characterList { background-color: rgba(255, 255, 255, 0.5); font-family: 'Cinzel', serif; padding: 30px; width: 40%; float: right; }
 
                 #characterList__border { border-style: double; border-width: 7px; border-color: rgb(185, 48, 50); padding: 20px; }

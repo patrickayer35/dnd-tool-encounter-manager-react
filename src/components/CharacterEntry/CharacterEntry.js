@@ -11,12 +11,14 @@ class CharacterEntry extends React.Component {
     render() {
         return(
             <div className='characterList__character'>
-                <button className='characterList__nameBtn' disabled={true}>{this.props.isUnique ? '*' : ''}{this.props.name}</button>
+                <button className='characterList__nameBtn'
+                        disabled={this.props.appState == 'encounter staging' ? false : true}
+                        onClick={() => (this.props.addToEncounter(this.props.characterIndex))}>{this.props.isUnique ? '*' : ''}{this.props.name}</button>
                 <button className='characterList__editBtn'
-                        disabled={this.props.appState == 'form displayed' ? true : false}
+                        disabled={this.props.appState == 'edit' ? false : true}
                         onClick={() => (this.props.edit(this.props.characterIndex))}>Edit</button>
                 <button className='characterList__deleteBtn'
-                        disabled={this.props.appState == 'form displayed' ? true : false}
+                        disabled={this.props.appState == 'edit' ? false : true}
                         onClick={() => (this.props.delete(this.props.characterIndex))}>Delete</button>
                 <div className='characterList__passivePerceptionDisplay'>PP: {this.props.passivePerception}</div>
             </div>
@@ -25,4 +27,4 @@ class CharacterEntry extends React.Component {
 
 }
 
-export default CharacterEntry;
+export { CharacterEntry };
