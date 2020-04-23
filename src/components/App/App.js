@@ -147,7 +147,7 @@ class App extends React.Component {
     render() {
         return(
             <Fragment>
-                <h1>Dungeons &amp; Dragons: Encounter Manager</h1>
+                <h1>Dungeons &amp; Dragons: Encounter Manager Dawg</h1>
                 <div id='main'>
                     <div id='appSide'>
                         <div id='openingMenu' className={this.state.appState != 'start' ? 'hide' : ''}>
