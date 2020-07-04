@@ -1,0 +1,33 @@
+@import '../../../styles/variables.scss';
+
+.characterList {
+  background-color: $greyBackground;
+  font-family: $cinzel;
+  padding: 30px;
+  fieldset {
+    border-style: double;
+    border-width: 7px;
+    border-color: $headerRed;
+    padding: 20px;
+    legend {
+      font-size: 20px;
+      color: $headerRed;
+      padding: 0 10px;
+    }
+    .characterList__tooltip {
+      font-size: 12px;
+    }
+    .characterList__row {
+      margin-top: 12px;
+      .disabledBtn {
+        color: $disabledBtn;
+      }
+      .characterList__name {
+        width: 40%;
+      }
+      .characterList__manageBtn {
+        width: 20%;
+      }
+    }
+  }
+}

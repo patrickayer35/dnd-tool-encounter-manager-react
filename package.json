@@ -4,6 +4,8 @@
   "description": "V2 version of dnd encounter tool, built in React",
   "main": "webpack.config.js",
   "scripts": {
+    "start": "webpack-dev-server --open",
+    "build": "webpack",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -22,13 +24,21 @@
     "babel-loader": "^8.1.0",
     "classnames": "^2.2.6",
     "css-loader": "^3.6.0",
+    "file-loader": "^6.0.0",
     "html-webpack-plugin": "^4.3.0",
     "node-sass": "^4.14.1",
+    "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "sass": "^1.26.9",
+    "sass-loader": "^9.0.0",
     "style-loader": "^1.2.1",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.11.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.3.1",
+    "eslint-plugin-react": "^7.20.3"
   }
 }
