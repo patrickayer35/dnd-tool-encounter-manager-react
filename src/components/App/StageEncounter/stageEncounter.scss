@@ -1,0 +1,38 @@
+@import '../../../styles/variables.scss';
+
+.stagingArea {
+  background-color: $greyBackground;
+  font-family: $cinzel;
+  padding: 30px;
+  width: 90%;
+  fieldset {
+    border-style: double;
+    border-width: 7px;
+    border-color: $headerRed;
+    padding: 20px;
+    legend {
+      font-size: 20px;
+      color: $headerRed;
+      padding: 0 10px;
+    }
+  }
+  .stagingArea__list {
+    max-height: 30vw;
+    overflow: scroll;
+  }
+  &__row {
+    padding: 10px;
+    span {
+      margin-right: 20px;
+      font-size: 20px;
+    }
+    input {
+      padding: 6px;
+      width: 150px;
+      margin-right: 20px;
+    }
+  }
+  .btnsWrapper {
+    margin-top: 20px;
+  }
+}

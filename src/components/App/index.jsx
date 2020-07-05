@@ -5,6 +5,7 @@ import MainMenu from './MainMenu/index.jsx';
 import PCForm from './Forms/PCForm/index.jsx';
 import NPCForm from './Forms/NPCForm/index.jsx';
 import CharacterList from './CharacterList/index.jsx';
+import StagingArea from './StageEncounter/index.jsx';
 
 const updateAppState = (state, options) => {
   const { action, value } = options;
@@ -24,6 +25,11 @@ const updateAppState = (state, options) => {
         ...state,
         selectedCharacter: value,
       };
+    case 'UPDATE_COMBATANTS':
+      return {
+        ...state,
+        combatants: value,
+      };
     default:
       return state;
   }
@@ -33,6 +39,7 @@ const App = () => {
   const [appState, dispatch] = useReducer(updateAppState, {
     view: 'START',
     characters: [],
+    combatants: [],
     selectedCharacter: null,
   });
   const { view } = appState;
@@ -55,6 +62,7 @@ const App = () => {
               character={appState.selectedCharacter}
             />
           )}
+          {view === 'STAGE_ENCOUNTER' && <StagingArea />}
         </div>
         <div className="characterListSide">
           {appState.characters.length > 0 && <CharacterList />}

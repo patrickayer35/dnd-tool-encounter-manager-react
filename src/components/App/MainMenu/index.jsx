@@ -30,6 +30,14 @@ const startButtons = (appContext) => {
 const homeButtons = (appContext) => {
   const { appState, dispatch } = appContext;
 
+  const startNewEncounter = () => {
+    if (appState.characters.length < 1) {
+      alert('You must add at least 2 characters before you can start an encounter.');
+      return;
+    }
+    dispatch({ action: 'SWITCH_VIEW', value: 'STAGE_ENCOUNTER' });
+  }
+
   const backToStart = () => {
     if (appState.characters.length > 0) {
       if(!confirm('You will lose your current character list. Is this ok?')) {
@@ -44,7 +52,7 @@ const homeButtons = (appContext) => {
     <Fragment>
       <button onClick={() => dispatch({ action: 'SWITCH_VIEW', value: 'EDIT' })}>Edit Session</button>
       <button>Save Session</button>
-      <button>Start New Encounter</button>
+      <button onClick={() => startNewEncounter()}>Start New Encounter</button>
       <button onClick={() => backToStart()}>Back to Start</button>
     </Fragment>
   );

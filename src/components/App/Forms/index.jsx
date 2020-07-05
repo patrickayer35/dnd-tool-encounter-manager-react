@@ -24,23 +24,7 @@ const CharacterForm = ({ labels, header, state, setState, save, goBack, npc }) =
             </div>
           )
         })}
-        {npc && (
-          <div
-            className="hitDice"
-            onChange={event => setState({
-              ...state,
-              hitDice: event.target.value,
-            })}
-          >
-            <input type="radio" name="hitDice" value={4} />d4
-            <input type="radio" name="hitDice" value={6} />d6
-            <input type="radio" name="hitDice" value={8} />d8
-            <input type="radio" name="hitDice" value={10} />d10
-            <input type="radio" name="hitDice" value={12} />d12
-            <input type="radio" name="hitDice" value={20} />d20
-            <Tooltip text={'You must make a selection if the Hit Dice field is not empty.'} />
-          </div>
-        )}
+        {npc && buildHitDiceInputs(state, setState)}
       </fieldset>
       <div className="btnsWrapper">
         <button type="button" onClick={() => save()}>Save</button>
@@ -49,6 +33,34 @@ const CharacterForm = ({ labels, header, state, setState, save, goBack, npc }) =
     </form>
   );
 };
+
+const buildHitDiceInputs = (state, setState) => {
+  const btnOptions = [
+    '4', '6', '8', '10', '12', '20',
+  ];
+  return (
+    <div className="hitDice">
+      {btnOptions.map((item, index) => {
+        return (
+          <label key={index}>
+            <input
+              type="radio"
+              name="hitDice"
+              value={item}
+              defaultChecked={state.hitDice === item}
+              onChange={event => setState({
+                ...state,
+                hitDice: event.target.value,
+              })}
+            />
+            {`d${item}`}
+          </label>
+        )
+      })}
+      <Tooltip text={'You must make a selection if the Hit Dice field is not empty.'} />
+    </div>
+  );
+}
 
 CharacterForm.propTypes = {
   labels: PropTypes.array.isRequired,

@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import { AppContext } from '../../../../AppContext/index.jsx';
 import PropTypes from 'prop-types';
 import CharacterForm from '../index.jsx';
+import { searchForCharacter } from '../../../../helpers.js';
 
 const NPCForm = ({ create, character }) => {
   const { appState, dispatch } = useContext(AppContext);
@@ -84,6 +85,7 @@ const NPCForm = ({ create, character }) => {
       id: Date.now(),
       pc: false,
       unique: formData.name !== '',
+      inEncounter: false,
       ...formData,
     };
     dispatch({ action: 'UPDATE_CHARACTERS', value: appState.characters.concat(newCharacter) });
@@ -92,19 +94,16 @@ const NPCForm = ({ create, character }) => {
 
   const editNPC = () => {
     if (!dataIsValid()) return;
-    const { id, pc, unique } = appState.selectedCharacter;
+    const { id, pc, unique, inEncounter } = appState.selectedCharacter;
     let newCharacter = {
       id,
       pc,
       unique,
+      inEncounter,
       ...formData,
     };
-    let index = appState.characters.findIndex((elem) => elem.id === id);
-    if (index !== -1) {
-      let newList = appState.characters;
-      newList[index] = newCharacter;
-      dispatch({ action: 'UPDATE_CHARACTERS', value: newList });
-    }
+    const { found, newList } = searchForCharacter(newCharacter, appState.characters, 'UPDATE');
+    if (found) dispatch({ action: 'UPDATE_CHARACTERS', value: newList });
     dispatch({ action: 'UPDATE_SELECTED_CHARACTER', value: null });
     dispatch({ action: 'SWITCH_VIEW', value: 'EDIT' });
   };

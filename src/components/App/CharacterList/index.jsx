@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import { AppContext } from '../../../AppContext/index.jsx';
 import './characterList.scss';
 import classNames from 'classnames';
+import { searchForCharacter } from '../../../helpers.js';
 
 const CharacterList = () => {
   const { appState, dispatch } = useContext(AppContext);
@@ -12,6 +13,26 @@ const CharacterList = () => {
     },
   );
 
+  const handleUniqueCharacters = (item) => {
+    item = {
+      ...item,
+      inEncounter: true,
+    };
+    const { found, newList } = searchForCharacter(item, appState.characters, 'UPDATE');
+    if (found) dispatch({ action: 'UPDATE_CHARACTERS', value: newList });
+  };
+
+  const addToEncounter = (item) => {
+    if (item.unique) {
+      handleUniqueCharacters(item);
+    }
+    let initiative = item.pc ? null : Math.floor(Math.random() * 20) + 1 + parseInt(item.dexterity);
+    dispatch({
+      action: 'UPDATE_COMBATANTS',
+      value: appState.combatants.concat({ ...item, initiative: initiative }),
+   });
+  }
+
   const handleEditCharacter = (item) => {
     dispatch({ action: 'UPDATE_SELECTED_CHARACTER', value: item });
     dispatch({ action: 'SWITCH_VIEW', value: item.pc ? 'EDIT_PC' : 'EDIT_NPC' });
@@ -21,13 +42,8 @@ const CharacterList = () => {
     if (!confirm('Are you sure you want to delete this  character?')) {
       return;
     }
-    const { id } = item;
-    let index = appState.characters.findIndex((elem) => elem.id === id);
-    if (index !== -1) {
-      let newList = appState.characters;
-      newList.splice(index, 1);
-      dispatch({ action: 'UPDATE_CHARACTERS', value: newList });
-    }
+    const { found, newList } = searchForCharacter(item, appState.characters, 'DELETE');
+    if (found) dispatch({ action: 'UPDATE_CHARACTERS', value: newList });
   }
 
   return (
@@ -39,9 +55,10 @@ const CharacterList = () => {
           return (
             <div className="characterList__row" key={index}>
               <button
-                disabled={view !== 'STAGING_ENCOUNTER'}
+                onClick={() => addToEncounter(item)}
+                disabled={view !== 'STAGE_ENCOUNTER' || (item.unique && item.inEncounter)}
                 className={classNames('characterList__name', {
-                  ['disabledBtn']: view !== 'STAGING_ENCOUNTER',
+                  ['disabledBtn']: view !== 'STAGE_ENCOUNTER' || (item.unique && item.inEncounter),
                 })}
               >
                 {item.unique ? `*${item.name}` : item.race}
