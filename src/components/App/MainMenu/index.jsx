@@ -1,5 +1,6 @@
 import React, { Fragment, useContext } from 'react';
 import { AppContext } from '../../../AppContext/index.jsx';
+import Modal from '../../Modal/index.jsx';
 
 const MainMenu = () => {
   const appContext = useContext(AppContext);
@@ -11,6 +12,7 @@ const MainMenu = () => {
       {view === 'START' && startButtons(appContext)}
       {view === 'HOME' && homeButtons(appContext)}
       {view === 'EDIT' && editButtons(appContext)}
+      {view === 'SAVE_SESSION' && <Modal />}
     </Fragment>
   );
 };
@@ -51,7 +53,7 @@ const homeButtons = (appContext) => {
   return (
     <Fragment>
       <button onClick={() => dispatch({ action: 'SWITCH_VIEW', value: 'EDIT' })}>Edit Session</button>
-      <button>Save Session</button>
+      <button onClick={() => dispatch({ action: 'SWITCH_VIEW', value: 'SAVE_SESSION' })}>Save Session</button>
       <button onClick={() => startNewEncounter()}>Start New Encounter</button>
       <button onClick={() => backToStart()}>Back to Start</button>
     </Fragment>

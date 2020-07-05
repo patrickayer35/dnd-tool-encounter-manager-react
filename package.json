@@ -30,6 +30,7 @@
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "sanitize-filename": "^1.6.3",
     "sass": "^1.26.9",
     "sass-loader": "^9.0.0",
     "style-loader": "^1.2.1",
