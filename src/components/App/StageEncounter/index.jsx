@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
-import { AppContext } from '../../../AppContext/index.jsx';
-import { searchForCharacter } from '../../../helpers.js';
+import { AppContext } from '../../../lib/appContext.jsx';
+import { searchForCharacter } from '../../../lib/helpers.js';
 import './stageEncounter.scss';
 
 const StagingArea = () => {

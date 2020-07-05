@@ -1,8 +1,8 @@
 import React, { useContext, useState } from 'react';
-import { AppContext } from '../../../../AppContext/index.jsx';
+import { AppContext } from '../../../../lib/appContext.jsx';
 import PropTypes from 'prop-types';
 import CharacterForm from '../index.jsx';
-import { searchForCharacter } from '../../../../helpers.js';
+import { searchForCharacter } from '../../../../lib/helpers.js';
 
 const PCForm = ({ create, character }) => {
   const { appState, dispatch } = useContext(AppContext);

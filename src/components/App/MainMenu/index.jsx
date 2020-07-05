@@ -1,5 +1,5 @@
 import React, { Fragment, useContext } from 'react';
-import { AppContext } from '../../../AppContext/index.jsx';
+import { AppContext } from '../../../lib/appContext.jsx';
 import Modal from '../../Modal/index.jsx';
 
 const MainMenu = () => {

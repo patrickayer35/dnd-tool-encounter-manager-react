@@ -1,5 +1,5 @@
 import React, { useReducer } from 'react';
-import { AppContext } from '../../AppContext/index.jsx';
+import { AppContext } from '../../lib/appContext.jsx';
 import './app.scss';
 import MainMenu from './MainMenu/index.jsx';
 import PCForm from './Forms/PCForm/index.jsx';

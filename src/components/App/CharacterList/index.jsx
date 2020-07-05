@@ -1,8 +1,8 @@
 import React, { useContext } from 'react'
-import { AppContext } from '../../../AppContext/index.jsx';
+import { AppContext } from '../../../lib/appContext.jsx';
 import './characterList.scss';
 import classNames from 'classnames';
-import { searchForCharacter } from '../../../helpers.js';
+import { searchForCharacter } from '../../../lib/helpers.js';
 
 const CharacterList = () => {
   const { appState, dispatch } = useContext(AppContext);

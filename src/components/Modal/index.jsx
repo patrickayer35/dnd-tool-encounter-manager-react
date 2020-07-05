@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import './modal.scss';
 import sanitize from 'sanitize-filename';
-import { AppContext } from '../../AppContext/index.jsx';
+import { AppContext } from '../../lib/appContext.jsx';
 
 const Modal = () => {
   const { appState, dispatch } = useContext(AppContext);
