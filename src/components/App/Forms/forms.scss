@@ -18,6 +18,8 @@
     .dataRow {
       margin-bottom: 4px;
       position: relative;
+      display: flex;
+      align-items: center;
       label {
         display: inline-block;
         width: 30%;

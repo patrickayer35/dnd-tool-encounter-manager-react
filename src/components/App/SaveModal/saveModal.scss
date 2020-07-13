@@ -1,6 +1,6 @@
-@import '../../styles/variables.scss';
+@import '../../../styles/variables.scss';
 
-.modal {
+.saveModal {
   position: fixed;
   z-index: 1;
   left: 0;
@@ -8,9 +8,9 @@
   width: 100%;
   height: 100%;
   font-family: $cinzel;
-  .modal__content {
+  .saveModal__content {
     margin: 200px auto 0;
-    width: 400px;
+    width: 450px;
     background-color: $greyBackground;
     padding: 30px;
     fieldset {
@@ -22,20 +22,18 @@
         padding: 0 10px;
       }
     }
-    h3 {
-      font-size: 28px;
-      text-align: right;
-      margin-bottom: 20px;
-    }
-    label, input {
-      display: inline-block;
-    }
-    label {
-      margin-right: 10px;
-      width: 35%;
-    }
-    input {
-      width: 59%;
+    .saveModal__form {
+      label, input {
+        display: inline-block;
+      }
+      label {
+        margin-right: 10px;
+        width: 29%;
+      }
+      input {
+        width: 64%;
+        padding: 6px;
+      }
     }
     .btnsWrapper {
       margin-top: 20px;

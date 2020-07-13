@@ -1,74 +1,52 @@
-import React, { useReducer } from 'react';
-import { AppContext } from '../../lib/appContext.jsx';
+import React, { useContext, Fragment } from 'react';
 import './app.scss';
 import MainMenu from './MainMenu/index.jsx';
 import PCForm from './Forms/PCForm/index.jsx';
 import NPCForm from './Forms/NPCForm/index.jsx';
 import CharacterList from './CharacterList/index.jsx';
 import StagingArea from './StageEncounter/index.jsx';
-
-const updateAppState = (state, options) => {
-  const { action, value } = options;
-  switch(action) {
-    case 'SWITCH_VIEW':
-      return {
-        ...state,
-        view: value,
-      };
-    case 'UPDATE_CHARACTERS':
-      return {
-        ...state,
-        characters: value,
-      };
-    case 'UPDATE_SELECTED_CHARACTER':
-      return {
-        ...state,
-        selectedCharacter: value,
-      };
-    case 'UPDATE_COMBATANTS':
-      return {
-        ...state,
-        combatants: value,
-      };
-    default:
-      return state;
-  }
-};
+import SaveModal from './SaveModal/index.jsx';
+import {
+  ViewContext,
+  ADD_PC,
+  ADD_NPC,
+  EDIT_PC,
+  EDIT_NPC,
+  STAGE_ENCOUNTER,
+  SAVE
+} from  '../../lib/context/ViewContext/index.jsx';
+import { CharactersContext } from '../../lib/context/CharactersContext/index.jsx';
 
 const App = () => {
-  const [appState, dispatch] = useReducer(updateAppState, {
-    view: 'START',
-    characters: [],
-    combatants: [],
-    selectedCharacter: null,
-  });
-  const { view } = appState;
+  const { view, setView } = useContext(ViewContext);
+  const { charactersState, dispatch } = useContext(CharactersContext);
 
   return (
-    <AppContext.Provider value={{appState, dispatch}}>
+    <Fragment>
+      {view === SAVE && <SaveModal />}
       <h1 className="title">Dungeons &amp; Dragons: Encounter Manager</h1>
       <div className="main">
         <div className="appSide">
           <MainMenu />
-          {(view === 'ADD_PC' || view === 'EDIT_PC') && (
+          {(view === ADD_PC || view === EDIT_PC) && (
             <PCForm
-              create={view === 'ADD_PC' ? true : false}
-              character={appState.selectedCharacter}
+              create={view === ADD_PC ? true : false}
+              character={charactersState.selectedCharacter}
             />
           )}
-          {(view === 'ADD_NPC' || view === 'EDIT_NPC') && (
+          {(view === ADD_NPC || view === EDIT_NPC) && (
             <NPCForm
-              create={view === 'ADD_NPC' ? true : false}
-              character={appState.selectedCharacter}
+              create={view === ADD_NPC ? true : false}
+              character={charactersState.selectedCharacter}
             />
           )}
-          {view === 'STAGE_ENCOUNTER' && <StagingArea />}
+          {view === STAGE_ENCOUNTER && <StagingArea />}
         </div>
         <div className="characterListSide">
-          {appState.characters.length > 0 && <CharacterList />}
+          {charactersState.characters.length > 0 && <CharacterList />}
         </div>
       </div>
-    </AppContext.Provider>
+    </Fragment>
   );
 };
 

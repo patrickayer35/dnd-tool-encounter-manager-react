@@ -1,17 +1,19 @@
 import React, { useContext, useState } from 'react';
-import { AppContext } from '../../../../lib/appContext.jsx';
+import { ViewContext, EDIT } from '../../../../lib/context/ViewContext/index.jsx';
+import { CharactersContext, UPDATE_CHARACTERS, UPDATE_SELECTED_CHARACTER } from '../../../../lib/context/CharactersContext/index.jsx';
 import PropTypes from 'prop-types';
 import CharacterForm from '../index.jsx';
-import { searchForCharacter } from '../../../../lib/helpers.js';
+import { Character, UPDATE } from '../../../../lib/CharacterClass.js';
 
 const NPCForm = ({ create, character }) => {
-  const { appState, dispatch } = useContext(AppContext);
+  const { setView } = useContext(ViewContext);
+  const { charactersState, dispatch } = useContext(CharactersContext);
   const [formData, setData] = useState(character || {
     name: '',
     race: '',
     dexterity: '',
     pageNumber: '',
-    modifier: '',
+    hitPointsMod: '',
     hitPoints: '',
     hitDiceCount: '',
     hitDice: '',
@@ -46,10 +48,10 @@ const NPCForm = ({ create, character }) => {
       help: 'The page number for your NPC (for easy refernce if using a book). This is not required.',
     },
     {
-      label: 'Modifier: ',
+      label: 'Hit Points Modifier: ',
       type: 'number',
-      stateMap: 'modifier',
-      value: formData.modifier,
+      stateMap: 'hitPointsMod',
+      value: formData.hitPointsMod,
       help: 'Your NPC\'s hit points bonus. Will default to 0 if left blank.',
     },
     {
@@ -70,50 +72,30 @@ const NPCForm = ({ create, character }) => {
 
   const dataIsValid = () => {
     let valid = true;
-    let basics = formData.race && formData.dexterity;
+    let basicsProvided = formData.race && formData.dexterity;
     let hitPointsIsValid = formData.hitPoints || (formData.hitDiceCount && formData.hitDice);
-    if (!basics || !hitPointsIsValid) {
+    if (!basicsProvided || !hitPointsIsValid) {
       alert('You must fill in all required fields.');
       valid = false;
     }
     return valid;
   };
 
-  const addNPC = () => {
+  const save = () => {
     if (!dataIsValid()) return;
-    let newCharacter = {
-      id: Date.now(),
+    let newCharacter = new Character({
+      id: create ? Date.now() : charactersState.selectedCharacter.id,
       pc: false,
       unique: formData.name !== '',
-      inEncounter: false,
       ...formData,
-    };
-    dispatch({ action: 'UPDATE_CHARACTERS', value: appState.characters.concat(newCharacter) });
-    dispatch({ action: 'SWITCH_VIEW', value: 'EDIT' });
-  };
-
-  const editNPC = () => {
-    if (!dataIsValid()) return;
-    const { id, pc, unique, inEncounter } = appState.selectedCharacter;
-    let newCharacter = {
-      id,
-      pc,
-      unique,
-      inEncounter,
-      ...formData,
-    };
-    const { found, newList } = searchForCharacter(newCharacter, appState.characters, 'UPDATE');
-    if (found) dispatch({ action: 'UPDATE_CHARACTERS', value: newList });
-    dispatch({ action: 'UPDATE_SELECTED_CHARACTER', value: null });
-    dispatch({ action: 'SWITCH_VIEW', value: 'EDIT' });
-  };
-
-  const save = () => {
+    });
+    setView(EDIT);
     if (create) {
-      addNPC();
-    }
-    else {
-      editNPC();
+      dispatch({ action: UPDATE_CHARACTERS, value: charactersState.characters.concat(newCharacter) });
+    } else {
+      const { found, newList } = newCharacter.searchForCharacter(charactersState.characters, UPDATE);
+      if (found) dispatch({ action: UPDATE_CHARACTERS, value: newList });
+      dispatch({ action: UPDATE_SELECTED_CHARACTER, value: null });
     }
   };
 
@@ -122,7 +104,7 @@ const NPCForm = ({ create, character }) => {
         formData.race ||
         formData.dexterity ||
         formData.pageNumber ||
-        formData.modifier ||
+        formData.hitPointsMod ||
         formData.hitPoints ||
         formData.hitDiceCount ||
         formData.hitDice) {
@@ -130,9 +112,9 @@ const NPCForm = ({ create, character }) => {
         return;
       }
     }
-    dispatch({ action: 'SWITCH_VIEW', value: 'EDIT' });
+    setView(EDIT);
     if (!create) {
-      dispatch({ action: 'UPDATE_SELECTED_CHARACTER', value: null })
+      dispatch({ action: UPDATE_SELECTED_CHARACTER, value: null })
     }
   };
 

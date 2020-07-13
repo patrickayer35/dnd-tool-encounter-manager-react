@@ -1,34 +1,34 @@
 import React, { useContext } from 'react';
-import { AppContext } from '../../../lib/appContext.jsx';
-import { searchForCharacter } from '../../../lib/helpers.js';
+import { ViewContext, HOME } from '../../../lib/context/ViewContext/index.jsx';
+import { CharactersContext, UPDATE_COMBATANTS, UPDATE_CHARACTERS } from '../../../lib/context/CharactersContext/index.jsx';
+import { UPDATE, DELETE } from '../../../lib/CharacterClass.js';
 import './stageEncounter.scss';
 
 const StagingArea = () => {
-  const { appState, dispatch } = useContext(AppContext);
+  const { setView } = useContext(ViewContext);
+  const { charactersState, dispatch } = useContext(CharactersContext);
+
 
   const removeFromEncounter = (item) => {
-    const { found, newList }  = searchForCharacter(item, appState.combatants, 'DELETE');
-    if (found) dispatch({ action: 'UPDATE_COMBATANTS', value: newList });
+    const { found, newList }  = item.searchForCharacter(charactersState.combatants, DELETE);
+    if (found) dispatch({ action: UPDATE_COMBATANTS, value: newList });
     if (item.unique) {
-      delete item.initiative;
-      item.inEncounter = false;
-      const { found, newList } = searchForCharacter(item, appState.characters, 'UPDATE');
-      if (found) dispatch({ action: 'UPDATE_CHARACTERS', value: newList });
+      item.resetInitiative();
+      const { found, newList } = item.searchForCharacter(charactersState.combatants, UPDATE);
+      if (found) dispatch({ action: UPDATE_CHARACTERS, value: newList });
     }
   }
 
   const cancelEncounter = () => {
     if (confirm('Are you sure you want to end this encounter?')) {
-      dispatch({ action: 'UPDATE_COMBATANTS', value: [] });
+      dispatch({ action: UPDATE_COMBATANTS, value: [] });
       let newList = [];
-      appState.characters.forEach(item => {
-        newList = newList.concat({
-          ...item,
-          inEncounter: false,
-        });
+      charactersState.characters.forEach(item => {
+        item.resetInitiative();
+        newList = newList.concat(item);
       });
-      dispatch({ action: 'UPDATE_CHARACTERS', value: newList });
-      dispatch({ action: 'SWITCH_VIEW', value: 'HOME' });
+      dispatch({ action: UPDATE_CHARACTERS, value: newList });
+      setView(HOME);
     }
   };
 
@@ -37,7 +37,7 @@ const StagingArea = () => {
       <fieldset>
         <legend>Start New Encounter</legend>
         <div className="stagingArea__list">
-          {appState.combatants.map((item, index) => {
+          {charactersState.combatants.map((item, index) => {
             return (
               <div key={index} className="stagingArea__row">
                 <span>{item.name || item.race}</span>
@@ -46,7 +46,7 @@ const StagingArea = () => {
                   placeholder={item.initiative || 'PC\'s initiative'}
                 />
                 <button onClick={() => removeFromEncounter(item)}>Remove from Encounter</button>
-            </div>
+              </div>
             );
           })}
         </div>

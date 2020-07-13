@@ -1,11 +1,13 @@
 import React, { useContext, useState } from 'react';
-import { AppContext } from '../../../../lib/appContext.jsx';
+import { ViewContext, EDIT } from '../../../../lib/context/ViewContext/index.jsx';
+import { CharactersContext, UPDATE_CHARACTERS, UPDATE_SELECTED_CHARACTER } from '../../../../lib/context/CharactersContext/index.jsx';
 import PropTypes from 'prop-types';
 import CharacterForm from '../index.jsx';
-import { searchForCharacter } from '../../../../lib/helpers.js';
+import { Character, UPDATE } from '../../../../lib/CharacterClass.js';
 
 const PCForm = ({ create, character }) => {
-  const { appState, dispatch } = useContext(AppContext);
+  const { setView } = useContext(ViewContext);
+  const { charactersState, dispatch } = useContext(CharactersContext);
   const [formData, setData] = useState(character || {
     name: '',
     dexterity: '',
@@ -36,41 +38,21 @@ const PCForm = ({ create, character }) => {
     return valid;
   }
 
-  const addPC = () => {
+  const save = () => {
     if (!dataIsValid()) return;
-    let newCharacter = {
-      id: Date.now(),
+    let newCharacter = new Character({
+      id: create ? Date.now() : charactersState.selectedCharacter.id,
       pc: true,
       unique: true,
-      inEncounter: false,
       ...formData,
-    };
-    dispatch({ action: 'UPDATE_CHARACTERS', value: appState.characters.concat(newCharacter) });
-    dispatch({ action: 'SWITCH_VIEW', value: 'EDIT' });
-  };
-
-  const editPC = () => {
-    if (!dataIsValid) return;
-    const { id, pc, unique, inEncounter } = appState.selectedCharacter;
-    let newCharacter = {
-      id,
-      pc,
-      unique,
-      inEncounter,
-      ...formData,
-    };
-    const { found, newList } = searchForCharacter(newCharacter, appState.characters, 'UPDATE');
-    if (found) dispatch({ action: 'UPDATE_CHARACTERS', value: newList });
-    dispatch({ action: 'UPDATE_SELECTED_CHARACTER', value: null });
-    dispatch({ action: 'SWITCH_VIEW', value: 'EDIT' });
-  }
-
-  const save = () => {
+    });
+    setView(EDIT);
     if (create) {
-      addPC();
-    }
-    else {
-      editPC();
+      dispatch({ action: UPDATE_CHARACTERS, value: charactersState.characters.concat(newCharacter) });
+    } else {
+      const { found, newList } = newCharacter.searchForCharacter(charactersState.characters, UPDATE);
+      if (found) dispatch({ action: UPDATE_CHARACTERS, value: newList });
+      dispatch({ action: UPDATE_SELECTED_CHARACTER, value: null });
     }
   }
 
@@ -80,9 +62,9 @@ const PCForm = ({ create, character }) => {
         return;
       }
     }
-    dispatch({ action: 'SWITCH_VIEW', value: 'EDIT' });
+    setView(EDIT);
     if (!create) {
-      dispatch({ action: 'UPDATE_SELECTED_CHARACTER', value: null })
+      dispatch({ action: UPDATE_SELECTED_CHARACTER, value: null });
     }
   }
 
