@@ -1,0 +1,18 @@
+@import '../../styles/variables.scss';
+
+.characterList {
+  width: 100%;
+  box-sizing: border-box;
+  &__tooltip {
+    font-size: 12px;
+  }
+  &__row {
+    margin-top: 12px;
+    .characterList__name {
+      width: 40%;
+    }
+    .characterList__manageBtn {
+      width: 20%;
+    }
+  }
+}

@@ -1,46 +1,32 @@
 import React, { useContext, Fragment } from 'react';
 import './app.scss';
-import MainMenu from './MainMenu/index.jsx';
-import PCForm from './Forms/PCForm/index.jsx';
-import NPCForm from './Forms/NPCForm/index.jsx';
-import CharacterList from './CharacterList/index.jsx';
-import StagingArea from './StageEncounter/index.jsx';
-import SaveModal from './SaveModal/index.jsx';
-import {
-  ViewContext,
-  ADD_PC,
-  ADD_NPC,
-  EDIT_PC,
-  EDIT_NPC,
-  STAGE_ENCOUNTER,
-  SAVE
-} from  '../../lib/context/ViewContext/index.jsx';
-import { CharactersContext } from '../../lib/context/CharactersContext/index.jsx';
+import MainMenu from '../MainMenu/index.jsx';
+import PCForm from '../Forms/PCForm/index.jsx';
+import NPCForm from '../Forms/NPCForm/index.jsx';
+import CharacterList from '../CharacterList/index.jsx';
+import { ViewContext, ADD_PC, ADD_NPC, EDIT_PC, EDIT_NPC, IN_ENCOUNTER, SAVE } from '../../lib/Context/View.jsx';
+import { CharactersContext } from '../../lib/Context/Characters.jsx';
+import Save from '../Save/index.jsx';
+import Encounter from '../Encounter/index.jsx';
 
 const App = () => {
-  const { view, setView } = useContext(ViewContext);
-  const { charactersState, dispatch } = useContext(CharactersContext);
+  const { view, } = useContext(ViewContext);
+  const { charactersState } = useContext(CharactersContext);
 
   return (
     <Fragment>
-      {view === SAVE && <SaveModal />}
+      {view === SAVE && <Save />}
       <h1 className="title">Dungeons &amp; Dragons: Encounter Manager</h1>
       <div className="main">
         <div className="appSide">
           <MainMenu />
           {(view === ADD_PC || view === EDIT_PC) && (
-            <PCForm
-              create={view === ADD_PC ? true : false}
-              character={charactersState.selectedCharacter}
-            />
+            <PCForm create={view === ADD_PC} character={charactersState.selectedCharacter} />
           )}
           {(view === ADD_NPC || view === EDIT_NPC) && (
-            <NPCForm
-              create={view === ADD_NPC ? true : false}
-              character={charactersState.selectedCharacter}
-            />
+            <NPCForm create={view === ADD_NPC} character={charactersState.selectedCharacter} />
           )}
-          {view === STAGE_ENCOUNTER && <StagingArea />}
+          {view === IN_ENCOUNTER && <Encounter />}
         </div>
         <div className="characterListSide">
           {charactersState.characters.length > 0 && <CharacterList />}

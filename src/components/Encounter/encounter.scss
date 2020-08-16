@@ -1,0 +1,21 @@
+@import '../../styles/variables.scss';
+
+.encounter {
+  margin-right: 20px;
+  
+  &Row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+
+    &__hpInput {
+      width: 50px;
+    }
+  }
+}
+
+.eliminated {
+  text-decoration: line-through;
+  color: $headerRed;
+}

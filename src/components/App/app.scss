@@ -12,7 +12,7 @@ body::after {
   right: 0;
   position: absolute;
   z-index: -1;
-  background-size: 1680px;
+  background-size: cover;
   background-repeat: no-repeat;
 }
 
@@ -41,5 +41,11 @@ body::after {
     background-color: $button;
     padding: 10px;
     margin-right: 20px;
+  }
+  .disabledBtn {
+    color: $disabledBtn;
+  }
+  input {
+    padding: 6px;
   }
 }

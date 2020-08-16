@@ -1,0 +1,15 @@
+@import '../../../styles/variables.scss';
+
+.startLabel {
+  font-family: $cinzel;
+  font-size: 16px;
+  background-color: $button;
+  padding: 10px;
+  margin-right: 20px;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.startInput {
+  display: none;
+}

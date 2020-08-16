@@ -1,0 +1,21 @@
+@import '../../../styles/variables.scss';
+
+.commonBackground {
+  background-color: $greyBackground;
+  font-family: $cinzel;
+  padding: 30px;
+  fieldset {
+    border-style: double;
+    border-width: 7px;
+    border-color: $headerRed;
+    padding: 20px;
+    legend {
+      font-size: 20px;
+      color: $headerRed;
+      padding: 0 10px;
+    }
+  }
+  &__buttons {
+    margin-top: 20px;
+  }
+}

@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 import App from './components/App/index.jsx';
-import { ViewContextProvider } from './lib/context/ViewContext/index.jsx';
-import { CharactersContextProvider } from './lib/context/CharactersContext/index.jsx';
+import { ViewContextProvider } from './lib/Context/View.jsx';
+import { CharactersContextProvider } from './lib/Context/Characters.jsx';
 
 ReactDom.render(
   <ViewContextProvider>
@@ -10,4 +10,5 @@ ReactDom.render(
       <App />
     </CharactersContextProvider>
   </ViewContextProvider>,
-  document.getElementById('root'));
+  document.getElementById('root'),
+);
