@@ -13,9 +13,6 @@ const SAVE = 'SAVE';
 
 const ViewContext = createContext(null);
 
-/**
- * @param {JSX} children
- */
 const ViewContextProvider = ({ children }) => {
   const [view, setView] = useState(START);
 
