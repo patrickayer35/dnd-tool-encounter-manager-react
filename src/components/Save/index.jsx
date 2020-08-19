@@ -12,8 +12,8 @@ const SaveModal = () => {
   return (
     <Modal
       title={'Save'}
-      buttons={{
-        leftBtn: {
+      buttons={[
+        {
           text: 'Save',
           func: () => {
             if (!filename) {
@@ -29,18 +29,19 @@ const SaveModal = () => {
             a.remove();
             alert(`You have saved your session ${file} to your downloads folder!`);
             setView(HOME);
-          },
+          }
         },
-        rightBtn: {
-          text: 'Cancel',
+        {
+          text: 'Camcel',
           func: () => {
             setView(HOME);
-          },
+          }
         },
-      }}>
-        <label className="saveModal__label">Session name: </label>
-        <input className="saveModal__input" type="text" onChange={(event) => setFileName(event.target.value)} />
-      </Modal>
+      ]}
+    >
+      <label className="saveModal__label">Session name: </label>
+      <input className="saveModal__input" type="text" onChange={(event) => setFileName(event.target.value)} />
+    </Modal>
   );
 };
 
